@@ -27,9 +27,8 @@ const StoryCard = ({
         onClick={onFavouriteClick}
       >
         <FaHeart
-          className={`icon-btn "text-[25px] cursor-pointer hover:text-red-500 transition-all duration-300" ${
-            isFavourite ? "text-red-500" : "text-white"
-          }`}
+          className={`icon-btn  "text-[25px] cursor-pointer hover:text-red-500 transition-all duration-300" ${
+            isFavourite ? "text-red-500" : "text-white"}`}
         />
       </button>
 
