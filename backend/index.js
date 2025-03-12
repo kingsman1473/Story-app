@@ -1,6 +1,9 @@
+//require("dotenv").env();
 require("dotenv").config();
 
-const config = require("./config.json");
+const port = process.env.PORT || 4000;
+
+//const config = require("./config.json");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const express = require("express");
@@ -12,7 +15,7 @@ const path = require("path");
 
 const { authenticateToken } = require("./utilities");
 
-mongoose.connect(config.connectionString);
+mongoose.connect(process.env.CONNECTION_STRING);
 
 const User = require("./models/user.model");
 const Story = require("./models/story.model");
@@ -23,7 +26,7 @@ app.use(express.json());
 app.use(cors({ origin: "*" }));
 
 //test api
-app.post("/create-account", async (req, res) => { 
+app.post("/create-account", async (req, res) => {
     //    return res.status(200).json({ message: "Hello World" });
 
     const { fullName, email, password } = req.body;
@@ -133,7 +136,7 @@ app.delete("/delete-image", (req, res) => {
 
     try {
         const filename=path.basename(imageUrl);
-        const filePath = path.join(__dirname, "uploads", filename); 
+        const filePath = path.join(__dirname, "uploads", filename);
 
         if (fs.existsSync(filePath)) {
             
@@ -165,7 +168,7 @@ app.post("/add-story", authenticateToken, async (req, res) => {
     const parsedVisitedDate = new Date(parseInt(visitedDate));
 
     try {
-        const story = new Story({  
+        const story = new Story({
           title,
           storyn,
           visitedLocation,
@@ -186,7 +189,7 @@ app.post("/add-story", authenticateToken, async (req, res) => {
 });
 
 //get all stories
-app.get("/get-all-stories", authenticateToken, async (req, res) => { 
+app.get("/get-all-stories", authenticateToken, async (req, res) => {
     const { userId } = req.user;
 
     try {
@@ -270,7 +273,7 @@ app.delete("/delete-story/:id", authenticateToken, async (req, res) => {
 });
 
 //update story favourite status
-app.put("/update-favourite/:id", authenticateToken, async (req, res) => { 
+app.put("/update-favourite/:id", authenticateToken, async (req, res) => {
     const { id } = req.params;
     const { isFavourite } = req.body;
     const { userId } = req.user;
@@ -292,7 +295,7 @@ app.put("/update-favourite/:id", authenticateToken, async (req, res) => {
 });
 
 //search story
-app.get("/search", authenticateToken, async (req, res) => { 
+app.get("/search", authenticateToken, async (req, res) => {
     const { userId } = req.user;
     const { query } = req.query;
     
@@ -318,7 +321,7 @@ app.get("/search", authenticateToken, async (req, res) => {
 });
 
 //filter story by date range
-app.get("/story/filter", authenticateToken, async (req, res) => { 
+app.get("/story/filter", authenticateToken, async (req, res) => {
     const { userId } = req.user;
     const { startDate, endDate } = req.query;
 
@@ -343,3 +346,5 @@ app.get("/story/filter", authenticateToken, async (req, res) => {
 
 app.listen(8000);
 module.exports=app;
+
+
